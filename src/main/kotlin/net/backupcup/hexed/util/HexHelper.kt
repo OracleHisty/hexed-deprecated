@@ -66,8 +66,8 @@ object  HexHelper {
                 if (!item.isEmpty) {
                     context.run { world, _ ->
                         val currentHandler = world.server?.playerManager?.getPlayer(player.uuid)?.currentScreenHandler
-                        (currentHandler as AccursedAltarScreenHandler).setAvailableHexList(getAvailableHexList(item))
-                        currentHandler.setCurrentHex(getAvailableHexList(item)[0])
+                        (currentHandler as AccursedAltarScreenHandler).availableHexList = (getAvailableHexList(item))
+                        currentHandler.currentHex = getAvailableHexList(item)[0]
                     }
                 }
             }

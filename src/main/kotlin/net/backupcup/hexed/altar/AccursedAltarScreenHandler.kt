@@ -7,8 +7,7 @@ import net.backupcup.hexed.register.RegisterItems
 import net.backupcup.hexed.register.RegisterScreenHandlers
 import net.backupcup.hexed.register.RegisterSounds
 import net.backupcup.hexed.register.RegisterStats
-import net.backupcup.hexed.util.HexHelper
-import net.backupcup.hexed.util.TaintedItem
+import net.backupcup.hexed.util.*
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.enchantment.Enchantment
@@ -25,8 +24,6 @@ import net.minecraft.screen.ScreenHandlerListener
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.sound.SoundCategory
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 
 class AccursedAltarScreenHandler(
     syncId: Int,
@@ -40,14 +37,22 @@ class AccursedAltarScreenHandler(
     private val context: ScreenHandlerContext
 
 
-    private var availableHexList: List<Enchantment>
-    fun getAvailableHexList(): List<Enchantment> { return this.availableHexList }
-    fun setAvailableHexList(list: List<Enchantment>) { this.availableHexList = list }
+    private lateinit var availableHexListBack: List<Enchantment>
+
+    var availableHexList: List<Enchantment>
+        get() = availableHexListBack
+        set(value) {
+            this.availableHexListBack = value
+        }
 
 
-    private lateinit var currentHex: Enchantment
-    fun getCurrentHex(): Enchantment { return this.currentHex }
-    fun setCurrentHex(enchantment: Enchantment) { this.currentHex = enchantment }
+    private lateinit var currentHexBack: Enchantment
+
+    var currentHex: Enchantment
+        get() = currentHexBack
+        set(value) {
+            currentHexBack = value
+        }
 
     val isActive: Property = Property.create()
 
@@ -123,8 +128,12 @@ class AccursedAltarScreenHandler(
 
                 blockEntity?.lit = false
 
-                playerEntity.sendMessage(Text.translatable("message.hexed.altar_used")
-                    .formatted(Formatting.RED).formatted(Formatting.BOLD).formatted(Formatting.ITALIC), true)
+                playerEntity.sendMessage(true) {
+                    translate("message.hexed.altar_used")
+                    red()
+                    bold()
+                    italic()
+                }
 
                 sendHexPacket()
                 sendActivePacket()
