@@ -1,6 +1,6 @@
 package net.backupcup.hexed.block
 
-import net.backupcup.hexed.util.HexRandom
+import net.backupcup.hexed.util.*
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.ShapeContext
@@ -32,85 +32,36 @@ class PlushieBlock(settings: Settings?, val playSound: SoundEvent?, val descript
     }
 
     init {
-        defaultState = defaultState
-            .with(FACING, Direction.NORTH)
+        defaultState = defaultState.with(FACING, Direction.NORTH)
     }
 
-    val SHAPE: VoxelShape = createCuboidShape(2.0, 0.0, 2.0, 14.0, 15.0, 14.0)
+    private val SHAPE: VoxelShape = createCuboidShape(2.0, 0.0, 2.0, 14.0, 15.0, 14.0)
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>?) {
         builder?.add(FACING)
     }
 
-    override fun appendTooltip(
-        stack: ItemStack?,
-        world: BlockView?,
-        tooltip: MutableList<Text>?,
-        options: TooltipContext?
-    ) {
-        if (descriptionText != null) tooltip?.add(Text.translatable(descriptionText).formatted(Formatting.RED, Formatting.BOLD))
+    override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, options: TooltipContext) {
+        if (descriptionText != null) tooltip + descriptionText.translate().red().bold()
         super.appendTooltip(stack, world, tooltip, options)
     }
 
-    override fun getCollisionShape(
-        state: BlockState?,
-        world: BlockView?,
-        pos: BlockPos?,
-        context: ShapeContext?
-    ): VoxelShape {
-        return SHAPE
-    }
+    override fun getCollisionShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE
 
-    override fun getOutlineShape(
-        state: BlockState?,
-        world: BlockView?,
-        pos: BlockPos?,
-        context: ShapeContext?
-    ): VoxelShape {
-        return SHAPE
-    }
+    override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE
 
-    override fun getSlotType(): EquipmentSlot {
-        return EquipmentSlot.HEAD
-    }
+    override fun getSlotType(): EquipmentSlot = EquipmentSlot.HEAD
 
-    override fun rotate(state: BlockState, rotation: BlockRotation): BlockState? {
-        return state.with(FACING, rotation.rotate(state.get(FACING)))
-    }
+    override fun rotate(state: BlockState, rotation: BlockRotation): BlockState = state.with(FACING, rotation.rotate(state.get(FACING)))
 
-    override fun mirror(state: BlockState, mirror: BlockMirror): BlockState {
-        return state.rotate(mirror.getRotation(state.get(FACING)))
-    }
+    override fun mirror(state: BlockState, mirror: BlockMirror): BlockState = state.rotate(mirror.getRotation(state.get(FACING)))
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState? {
-        return defaultState.with(FACING, ctx.horizontalPlayerFacing.opposite)
-    }
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState.with(FACING, ctx.horizontalPlayerFacing.opposite)
 
-    override fun canPathfindThrough(
-        state: BlockState?,
-        world: BlockView?,
-        pos: BlockPos?,
-        type: NavigationType?
-    ): Boolean {
-        return false
-    }
+    override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType): Boolean = false
 
-    override fun onUse(
-        state: BlockState?,
-        world: World,
-        pos: BlockPos?,
-        player: PlayerEntity?,
-        hand: Hand?,
-        hit: BlockHitResult?
-    ): ActionResult {
-        if (playSound != null) {
-            world.playSound(
-                null, pos,
-                playSound,
-                SoundCategory.BLOCKS,
-                HexRandom.nextFloat() * 0.25f + 0.25f, HexRandom.nextFloat() * 0.5f + 0.75f)
-        }
-
+    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+        if (playSound != null) world.playBlockSound(pos, playSound, HexRandom.nextFloat() * 0.25f + 0.25f, HexRandom.nextFloat() * 0.5f + 0.75f)
         return ActionResult.success(world.isClient)
     }
 }

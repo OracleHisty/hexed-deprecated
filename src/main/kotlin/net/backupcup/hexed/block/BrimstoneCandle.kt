@@ -1,5 +1,6 @@
 package net.backupcup.hexed.block
 
+import net.backupcup.hexed.util.*
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.client.item.TooltipContext
@@ -20,7 +21,7 @@ import net.minecraft.world.World
 
 
 class BrimstoneCandle(
-    settings: Settings?,
+    settings: Settings,
     override val particleExtinguish: ParticleEffect = ParticleTypes.LARGE_SMOKE
 ) : AbstractTallCandle(settings) {
 
@@ -31,27 +32,22 @@ class BrimstoneCandle(
     }
 
     init {
-        defaultState = defaultState
-            .with(LIT, false)
-            .with(TOP, false)
+        defaultState = defaultState.with(LIT, false).with(TOP, false)
     }
 
     override fun appendTooltip(
-        stack: ItemStack?,
+        stack: ItemStack,
         world: BlockView?,
-        tooltip: MutableList<Text>?,
+        tooltip: MutableList<Text>,
         options: TooltipContext?
     ) {
-        tooltip?.add(Text.translatable("tooltip.hexed.brimstone_candle.line_1")
-            .formatted(Formatting.DARK_RED, Formatting.ITALIC, Formatting.BOLD))
-        tooltip?.add(Text.translatable("tooltip.hexed.brimstone_candle.line_2")
-            .formatted(Formatting.DARK_RED, Formatting.ITALIC, Formatting.BOLD))
-        tooltip?.add(Text.translatable("tooltip.hexed.brimstone_candle.line_3")
-            .formatted(Formatting.GRAY))
+        tooltip + "tooltip.hexed.brimstone_candle.line_1".translate().darkRed().italic().bold()
+        tooltip + "tooltip.hexed.brimstone_candle.line_2".translate().darkRed().italic().bold()
+        tooltip + "tooltip.hexed.brimstone_candle.line_3".translate().gray()
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>?) {
-        builder?.add(LIT, TOP)
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        builder.add(LIT, TOP)
     }
 
     override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random) {
@@ -74,3 +70,5 @@ class BrimstoneCandle(
         }
     }
 }
+
+val BlockState.lit get() = this.get(BrimstoneCandle.LIT)

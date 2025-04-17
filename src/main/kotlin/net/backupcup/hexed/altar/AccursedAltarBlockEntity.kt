@@ -1,11 +1,12 @@
 package net.backupcup.hexed.altar
 
+import net.backupcup.hexed.altar.AccursedAltarBlockEntity.Companion.CANDLE_OFFSETS
 import net.backupcup.hexed.block.AbstractTallCandle
-import net.backupcup.hexed.block.BrimstoneCandle
+import net.backupcup.hexed.block.lit
 import net.backupcup.hexed.register.RegisterBlockEntities
 import net.backupcup.hexed.register.RegisterBlocks
 import net.backupcup.hexed.register.RegisterSounds
-import net.backupcup.hexed.util.HexRandom
+import net.backupcup.hexed.util.*
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -25,50 +26,32 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
-import kotlin.random.Random
 
-class AccursedAltarBlockEntity(
-    pos: BlockPos?, state:
-    BlockState?
-) : BlockEntity(
-    RegisterBlockEntities.ACCURSED_ALTAR_BLOCK_ENTITY,
-    pos,
-    state
-), NamedScreenHandlerFactory {
+class AccursedAltarBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(RegisterBlockEntities.ACCURSED_ALTAR_BLOCK_ENTITY, pos, state), NamedScreenHandlerFactory {
+    private var isActive = validBlockState?.let { it.block == RegisterBlocks.ACCURSED_ALTAR && it.active } ?: false
 
-    private var isActive =
-        if(this.world?.getBlockState(this.pos)?.block == RegisterBlocks.ACCURSED_ALTAR)
-            { world?.getBlockState(this.pos)?.get(AccursedAltar.ACTIVE) }
-        else false
-
-    fun getActiveState(): Boolean? {
+    fun getActiveState(): Boolean {
         markDirty()
-        return if(this.world?.getBlockState(this.pos)?.block == RegisterBlocks.ACCURSED_ALTAR)
-                    { world?.getBlockState(this.pos)?.get(AccursedAltar.ACTIVE) }
-               else false
+        return validBlockState?.let { it.block == RegisterBlocks.ACCURSED_ALTAR && it.lit } ?: false
     }
 
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
         return AccursedAltarScreenHandler(syncId, playerInventory, player, ScreenHandlerContext.EMPTY, this)
     }
 
-    override fun getDisplayName(): Text {
-        return Text.translatable(cachedState.block.translationKey)
-    }
+    override fun getDisplayName(): Text = cachedState.block.translationKey.translate()
 
-    override fun readNbt(nbt: NbtCompound?) {
+    override fun readNbt(nbt: NbtCompound) {
         super.readNbt(nbt)
-        isActive = nbt?.getBoolean("active")
+        isActive = nbt.getBoolean("active")
     }
 
-    override fun writeNbt(nbt: NbtCompound?) {
+    override fun writeNbt(nbt: NbtCompound) {
         super.writeNbt(nbt)
-        nbt?.putBoolean("active", isActive == true)
+        nbt.putBoolean("active", isActive == true)
     }
 
-    override fun toInitialChunkDataNbt(): NbtCompound {
-        return createNbt()
-    }
+    override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
 
     override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? {
         return BlockEntityUpdateS2CPacket.create(this)
@@ -89,7 +72,7 @@ class AccursedAltarBlockEntity(
         )
 
         fun clientTick(world: World, pos: BlockPos, state: BlockState, blockEntity: AccursedAltarBlockEntity) {
-            if (!state.get(AccursedAltar.ACTIVE)) {
+            if (!state.active) {
                 if (state.get(AccursedAltar.FACING).axis == Direction.Axis.Z) {
                     CANDLE_OFFSETS[0].forEach {particlePos ->
                         blockEntity.clientCheckCandles(blockEntity, particlePos, world, pos)
@@ -100,7 +83,7 @@ class AccursedAltarBlockEntity(
                     }
                 }
                 if (world.time % 20L == 0L) {
-                    world.addImportantParticle(
+                    world.addParticle(
                         ParticleTypes.ANGRY_VILLAGER,
                         pos.x + 0.5,
                         pos.y + 1.0,
@@ -108,7 +91,7 @@ class AccursedAltarBlockEntity(
                         HexRandom.nextDouble(-.025, .025), HexRandom.nextDouble(-.025, .025), HexRandom.nextDouble(-.025, .025)
                     )}
             } else {
-                world.addImportantParticle(
+                world.addParticle(
                     DustParticleEffect.DEFAULT,
                     pos.x + 0.5,
                     pos.y + 1.0,
@@ -118,77 +101,56 @@ class AccursedAltarBlockEntity(
             }
         }
 
+
+
         fun tick(world: World, pos: BlockPos, state: BlockState, blockEntity: AccursedAltarBlockEntity) {
             if (world.time % 20L == 0L) {
-                if (!state.get(AccursedAltar.ACTIVE)) {
-                    if (state.get(AccursedAltar.FACING).axis == Direction.Axis.Z) {
-                        if (blockEntity.serverCheckCandles(CANDLE_OFFSETS[0], world, pos, blockEntity) == 6)
-                            blockEntity.altarStateSet(world, pos, state, true)
-                    } else {
-                        if (blockEntity.serverCheckCandles(CANDLE_OFFSETS[1], world, pos, blockEntity) == 6)
-                            blockEntity.altarStateSet(world, pos, state, true)
-                    }
-                } else {
-                    if (state.get(AccursedAltar.FACING).axis == Direction.Axis.Z) {
-                        if (blockEntity.serverCheckCandles(CANDLE_OFFSETS[0], world, pos, blockEntity) < 6)
-                            blockEntity.altarStateSet(world, pos, state, false)
-                    } else {
-                        if (blockEntity.serverCheckCandles(CANDLE_OFFSETS[1], world, pos, blockEntity) < 6)
-                            blockEntity.altarStateSet(world, pos, state, false)
-                    }
-                }
+
+                val isZ = state.facing.axis == Direction.Axis.Z
+                val isActivate = !state.active
+                val offset = if(isZ) 0 else 1
+                val operation: (Int) -> Boolean = if(isActivate) { a -> a == 6 } else { a -> a < 6 }
+
+                if (blockEntity.serverCheckCandles(CANDLE_OFFSETS[offset], world, pos, blockEntity).let(operation)) blockEntity.altarStateSet(world, pos, state, isActivate)
             }
         }
     }
 
-    private fun posGetCandle(world: World, pos: BlockPos, offset: BlockPos): Boolean {
-        return world.getBlockState(
-            BlockPos(pos.x + offset.x, pos.y + offset.y, pos.z + offset.z)
-        ).block == RegisterBlocks.BRIMSTONE_CANDLE
-    }
+    private fun posGetCandle(world: World, pos: BlockPos, offset: BlockPos): Boolean = world.getBlockState(pos.add(offset)).block == RegisterBlocks.BRIMSTONE_CANDLE
 
-    private fun posGetCandleLit(world: World, pos: BlockPos, offset: BlockPos): Boolean {
-        return world.getBlockState(
-            BlockPos(pos.x + offset.x, pos.y + offset.y, pos.z + offset.z)
-        ).get(BrimstoneCandle.LIT)
-    }
+    private fun posGetCandleLit(world: World, pos: BlockPos, offset: BlockPos): Boolean = world.getBlockState(pos.add(offset)).lit
 
     private fun altarStateSet(world: World, pos: BlockPos, state: BlockState, newState: Boolean) {
-        if (newState) {
-            world.playSound(
-                null, pos,
-                RegisterSounds.ACCURSED_ALTAR_ACTIVATE, SoundCategory.BLOCKS,
-                0.25f, 1f) }
-        else {
-            world.playSound(
-                null, pos,
-                SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS,
-                0.25f, 1f)}
+        world.playSound(
+            null, pos,
+            if(newState) RegisterSounds.ACCURSED_ALTAR_ACTIVATE else SoundEvents.BLOCK_FIRE_EXTINGUISH,
+            SoundCategory.BLOCKS,
+            0.25f, 1f)
+
         world.setBlockState(pos, state.with(AccursedAltar.ACTIVE, newState))
     }
 
-    fun changeCandleState(newState: Boolean) {
-        val blockPos: BlockPos = this.pos
-        val world: World? = this.world
-        val offsetList: List<BlockPos> =
-            if (world?.getBlockState(blockPos)?.get(AccursedAltar.FACING)?.axis == Direction.Axis.Z)
-                CANDLE_OFFSETS[0]
-            else
-                CANDLE_OFFSETS[1]
+    var lit: Boolean
+        get() = false
+        set(newState) {
+            val blockPos: BlockPos = this.pos
+            val world: World = this.world ?: return
+            val offsetList: List<BlockPos> =
+                if (world.getBlockState(blockPos)?.get(AccursedAltar.FACING)?.axis == Direction.Axis.Z)
+                    CANDLE_OFFSETS[0]
+                else
+                    CANDLE_OFFSETS[1]
 
-        offsetList.forEach { offset ->
-            val candlePos = BlockPos(blockPos.x + offset.x, blockPos.y + offset.y, blockPos.z + offset.z)
-            if (world?.getBlockState(candlePos)?.isOf(RegisterBlocks.BRIMSTONE_CANDLE) == true) {
-                if (world.getBlockState(candlePos).get(BrimstoneCandle.LIT)) {
-                    AbstractTallCandle.setLit(world, candlePos, world.getBlockState(candlePos), newState)
-                    world.playSound(
-                        null, candlePos,
-                        SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS,
-                        0.125f, 1f)
+            offsetList.map { blockPos + it }.forEach { candlePos ->
+                val state = world.getBlockState(candlePos)
+                if (state.isOf(RegisterBlocks.BRIMSTONE_CANDLE)) {
+                    if (state.lit) {
+                        AbstractTallCandle.setLit(world, candlePos, state, newState)
+                        world.playBlockSound(candlePos, SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.125f, 1f)
+                    }
                 }
             }
         }
-    }
 
     private fun serverCheckCandles(offsetList: List<BlockPos>, world: World, pos: BlockPos, blockEntity: AccursedAltarBlockEntity): Int {
         var candlesMatch = 0

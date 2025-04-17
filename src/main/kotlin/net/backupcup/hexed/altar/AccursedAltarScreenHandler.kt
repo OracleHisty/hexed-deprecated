@@ -121,7 +121,7 @@ class AccursedAltarScreenHandler(
                     RegisterSounds.ACCURSED_ALTAR_HEX,
                     SoundCategory.BLOCKS, 1.25f, 1f)
 
-                blockEntity?.changeCandleState(false)
+                blockEntity?.lit = false
 
                 playerEntity.sendMessage(Text.translatable("message.hexed.altar_used")
                     .formatted(Formatting.RED).formatted(Formatting.BOLD).formatted(Formatting.ITALIC), true)

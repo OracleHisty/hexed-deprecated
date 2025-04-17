@@ -1,9 +1,11 @@
 package net.backupcup.hexed.altar
 
 import net.backupcup.hexed.Hexed
+import net.backupcup.hexed.altar.AccursedAltar.Companion.ACTIVE
+import net.backupcup.hexed.altar.AccursedAltar.Companion.FACING
 import net.backupcup.hexed.register.RegisterBlockEntities
 import net.backupcup.hexed.register.RegisterStats
-import net.backupcup.hexed.util.TextWrapUtils
+import net.backupcup.hexed.util.*
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
@@ -45,17 +47,19 @@ class AccursedAltar(settings: Settings?
             .with(FACING, Direction.NORTH)
     }
 
-    private val SHAPE = Stream.of(
+    private val SHAPE = sequenceOf(
         createCuboidShape(0.0, 5.0, 0.0, 3.0, 16.0, 3.0),
         createCuboidShape(13.0, 5.0, 0.0, 16.0, 16.0, 3.0),
         createCuboidShape(2.0, 0.0, 2.0, 14.0, 8.0, 14.0),
         createCuboidShape(1.0, 8.0, 1.0, 15.0, 12.0, 15.0),
         createCuboidShape(13.0, 5.0, 13.0, 16.0, 16.0, 16.0),
         createCuboidShape(0.0, 5.0, 13.0, 3.0, 16.0, 16.0)
-    ).reduce { v1, v2 -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR) }.get();
+    ).reduce { v1, v2 -> VoxelShapes.combineAndSimplify(v1, v2, BooleanBiFunction.OR) };
 
-    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>?) {
-        builder?.add(FACING, ACTIVE)
+
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        builder.add(FACING, ACTIVE)
     }
 
     override fun appendTooltip(
@@ -70,20 +74,16 @@ class AccursedAltar(settings: Settings?
             if (i < 3) { formatList.add(0, Formatting.DARK_RED); formatList.add(1, Formatting.ITALIC); formatList.add(0, Formatting.BOLD) }
             else { formatList.add(0, Formatting.GRAY) }
 
-            var text: MutableText = Text.translatable("tooltip.hexed.accursed_altar.line_$i")
+            val text = Text.translatable("tooltip.hexed.accursed_altar.line_$i")
             formatList.forEach { text.formatted(it) }
             tooltip?.add(text)
         }
         super.appendTooltip(stack, world, tooltip, options)
     }
 
-    override fun getRenderType(state: BlockState?): BlockRenderType {
-        return BlockRenderType.MODEL
-    }
+    override fun getRenderType(state: BlockState?): BlockRenderType = BlockRenderType.MODEL
 
-    override fun createBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity {
-        return AccursedAltarBlockEntity(pos, state)
-    }
+    override fun createBlockEntity(pos: BlockPos, state: BlockState): BlockEntity = AccursedAltarBlockEntity(pos, state)
 
     @Deprecated("Deprecated in Java")
     override fun getOutlineShape(
@@ -96,47 +96,30 @@ class AccursedAltar(settings: Settings?
     }
 
     @Deprecated("Deprecated in Java")
-    override fun getCollisionShape(
-        state: BlockState?,
-        world: BlockView?,
-        pos: BlockPos?,
-        context: ShapeContext?
-    ): VoxelShape {
-        return SHAPE
-    }
+    override fun getCollisionShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape = SHAPE
 
-    override fun rotate(state: BlockState, rotation: BlockRotation): BlockState? {
-        return state.with(FACING, rotation.rotate(state.get(FACING)))
-    }
+    override fun rotate(state: BlockState, rotation: BlockRotation): BlockState = state.with(FACING, rotation.rotate(state.get(FACING)))
 
-    override fun mirror(state: BlockState, mirror: BlockMirror): BlockState {
-        return state.rotate(mirror.getRotation(state.get(FACING)))
-    }
+    override fun mirror(state: BlockState, mirror: BlockMirror): BlockState = state.rotate(mirror.getRotation(state.get(FACING)))
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState? {
-        return defaultState.with(FACING, ctx.horizontalPlayerFacing.opposite)
-    }
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState.with(FACING, ctx.horizontalPlayerFacing.opposite)
 
-    override fun onUse(
-        state: BlockState?,
-        world: World?,
-        pos: BlockPos?,
-        player: PlayerEntity?,
-        hand: Hand?,
-        hit: BlockHitResult?
-    ): ActionResult {
-        if (!world!!.isClient) {
-            if(!state!!.get(ACTIVE)) {
-                player?.sendMessage(Text.translatable("message.hexed.altar_no_candles")
-                    .formatted(Formatting.RED).formatted(Formatting.BOLD).formatted(Formatting.ITALIC), true)
+    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+        if (!world.isClient) {
+            if(!state.active) {
+                player.sendMessage(true) {
+                    translate("message.hexed.altar_no_candles")
+                    red()
+                    bold()
+                    italic()
+                }
+
                 return ActionResult.SUCCESS
             }
 
-            val screenHandlerFactory: NamedScreenHandlerFactory? = state.createScreenHandlerFactory(world, pos)
-
-            if (screenHandlerFactory != null) {
-                player?.openHandledScreen(screenHandlerFactory)
-                player?.incrementStat(RegisterStats.ACCURSED_ALTAR_OPENED)
+            state.createScreenHandlerFactory(world, pos).also {
+                player.openHandledScreen(it)
+                player.incrementStat(RegisterStats.ACCURSED_ALTAR_OPENED)
             }
         }
 
@@ -156,3 +139,6 @@ class AccursedAltar(settings: Settings?
         }
     }
 }
+
+val BlockState.facing: Direction get() = this.get(FACING)
+val BlockState.active: Boolean get() = this.get(ACTIVE)

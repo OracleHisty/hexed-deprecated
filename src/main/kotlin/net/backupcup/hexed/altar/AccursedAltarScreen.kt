@@ -30,6 +30,10 @@ class AccursedAltarScreen(
     private lateinit var currentHex: String
     private lateinit var availableHexList: MutableList<String>
 
+    init {
+        isAltarActive = false
+    }
+
     private val UKRefMap = mapOf<Enchantment, String>(
         RegisterEnchantments.METAMORPHOSIS_HEX to "tooltip.hexed.ultrakill.mankind_is_dead",
         RegisterEnchantments.BLOODTHIRSTY_HEX to "tooltip.hexed.ultrakill.blood_is_fuel",
