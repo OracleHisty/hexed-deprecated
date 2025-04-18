@@ -38,8 +38,6 @@ public abstract class PlayerEntityMixin extends Entity {
 
     @Shadow public abstract Iterable<ItemStack> getArmorItems();
 
-
-
     @Inject(method = "takeShieldHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;disableShield(Z)V", shift = At.Shift.AFTER))
     private void hexed$harvestApplyBlight(LivingEntity attacker, CallbackInfo ci) {
         if (attacker.getMainHandStack().getItem() instanceof BlightedHarvestItem) {

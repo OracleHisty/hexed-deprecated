@@ -16,47 +16,47 @@ import net.minecraft.registry.Registries
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.ScreenHandlerListener
+import net.minecraft.text.MutableText
+import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 
 object  HexHelper {
     private val blockedHexList by lazy { generateHexAvailability() }
 
-    private fun generateHexAvailability(): List<AbstractHex> {
-        val tempList: MutableList<AbstractHex> = mutableListOf()
-
-        if (Hexed.getConfig()?.aflameHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.AFLAME_HEX) }
-        if (Hexed.getConfig()?.persecutedHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.PERSECUTED_HEX) }
-        if (Hexed.getConfig()?.ephemeralHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.EPHEMERAL_HEX) }
-        if (Hexed.getConfig()?.vindictiveHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.VINDICTIVE_HEX) }
-        if (Hexed.getConfig()?.traitorousHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.TRAITOROUS_HEX) }
-        if (Hexed.getConfig()?.displacedHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.DISPLACED_HEX) }
-        if (Hexed.getConfig()?.avertingHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.AVERTING_HEX) }
-        if (Hexed.getConfig()?.aquatiqueHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.AQUATIQUE_HEX) }
-        if (Hexed.getConfig()?.dynamiqueHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.DYNAMIQUE_HEX) }
-        if (Hexed.getConfig()?.ironcladHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.IRONCLAD_HEX) }
-        if (Hexed.getConfig()?.franticHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.FRANTIC_HEX) }
-        if (Hexed.getConfig()?.bloodthirstyHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.BLOODTHIRSTY_HEX) }
-        if (Hexed.getConfig()?.disfigurementHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.DISFIGUREMENT_HEX) }
-        if (Hexed.getConfig()?.metamorphosisHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.METAMORPHOSIS_HEX) }
-        if (Hexed.getConfig()?.divineHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.DIVINE_HEX) }
-        if (Hexed.getConfig()?.celebrationHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.CELEBRATION_HEX) }
-        if (Hexed.getConfig()?.flaringHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.FLARING_HEX) }
-        if (Hexed.getConfig()?.lingerHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.LINGER_HEX) }
-        if (Hexed.getConfig()?.seizeHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.SEIZE_HEX) }
-        if (Hexed.getConfig()?.sepultureHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.SEPULTURE_HEX) }
-        if (Hexed.getConfig()?.ruinousHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.RUINOUS_HEX) }
-        if (Hexed.getConfig()?.amplifyHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.AMPLIFY_HEX) }
-        if (Hexed.getConfig()?.overburdenHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.OVERBURDEN_HEX) }
-        if (Hexed.getConfig()?.famishmentHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.FAMISHMENT_HEX) }
-        if (Hexed.getConfig()?.aggravateHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.AGGRAVATE_HEX) }
-        if (Hexed.getConfig()?.volatilityHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.VOLATILITY_HEX) }
-        if (Hexed.getConfig()?.phasedHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.PHASED_HEX) }
-        if (Hexed.getConfig()?.overclockHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.OVERCLOCK_HEX) }
-        if (Hexed.getConfig()?.provisionHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.PROVISION_HEX) }
-        if (Hexed.getConfig()?.resentfulHex?.shouldRegister == false) { tempList.add(RegisterEnchantments.RESENTFUL_HEX) }
-
-        return tempList
-    }
+    private fun generateHexAvailability(): List<AbstractHex> = Hexed.getConfig()?.let { config ->
+        buildList {
+            if (!config.aflameHex.shouldRegister) add(RegisterEnchantments.AFLAME_HEX)
+            if (config.persecutedHex.shouldRegister) add(RegisterEnchantments.PERSECUTED_HEX)
+            if (config.ephemeralHex.shouldRegister) add(RegisterEnchantments.EPHEMERAL_HEX)
+            if (config.vindictiveHex.shouldRegister) add(RegisterEnchantments.VINDICTIVE_HEX)
+            if (config.traitorousHex.shouldRegister) add(RegisterEnchantments.TRAITOROUS_HEX)
+            if (config.displacedHex.shouldRegister) add(RegisterEnchantments.DISPLACED_HEX)
+            if (config.avertingHex.shouldRegister) add(RegisterEnchantments.AVERTING_HEX)
+            if (config.aquatiqueHex.shouldRegister) add(RegisterEnchantments.AQUATIQUE_HEX)
+            if (config.dynamiqueHex.shouldRegister) add(RegisterEnchantments.DYNAMIQUE_HEX)
+            if (config.ironcladHex.shouldRegister) add(RegisterEnchantments.IRONCLAD_HEX)
+            if (config.franticHex.shouldRegister) add(RegisterEnchantments.FRANTIC_HEX)
+            if (config.bloodthirstyHex.shouldRegister) add(RegisterEnchantments.BLOODTHIRSTY_HEX)
+            if (config.disfigurementHex.shouldRegister) add(RegisterEnchantments.DISFIGUREMENT_HEX)
+            if (config.metamorphosisHex.shouldRegister) add(RegisterEnchantments.METAMORPHOSIS_HEX)
+            if (config.divineHex.shouldRegister) add(RegisterEnchantments.DIVINE_HEX)
+            if (config.celebrationHex.shouldRegister) add(RegisterEnchantments.CELEBRATION_HEX)
+            if (config.flaringHex.shouldRegister) add(RegisterEnchantments.FLARING_HEX)
+            if (config.lingerHex.shouldRegister) add(RegisterEnchantments.LINGER_HEX)
+            if (config.seizeHex.shouldRegister) add(RegisterEnchantments.SEIZE_HEX)
+            if (config.sepultureHex.shouldRegister) add(RegisterEnchantments.SEPULTURE_HEX)
+            if (config.ruinousHex.shouldRegister) add(RegisterEnchantments.RUINOUS_HEX)
+            if (config.amplifyHex.shouldRegister) add(RegisterEnchantments.AMPLIFY_HEX)
+            if (config.overburdenHex.shouldRegister) add(RegisterEnchantments.OVERBURDEN_HEX)
+            if (config.famishmentHex.shouldRegister) add(RegisterEnchantments.FAMISHMENT_HEX)
+            if (config.aggravateHex.shouldRegister) add(RegisterEnchantments.AGGRAVATE_HEX)
+            if (config.volatilityHex.shouldRegister) add(RegisterEnchantments.VOLATILITY_HEX)
+            if (config.phasedHex.shouldRegister) add(RegisterEnchantments.PHASED_HEX)
+            if (config.overclockHex.shouldRegister) add(RegisterEnchantments.OVERCLOCK_HEX)
+            if (config.provisionHex.shouldRegister) add(RegisterEnchantments.PROVISION_HEX)
+            if (config.resentfulHex.shouldRegister) add(RegisterEnchantments.RESENTFUL_HEX)
+        }
+    } ?: emptyList()
 
     fun generatorListener(context: ScreenHandlerContext, player: PlayerEntity): ScreenHandlerListener {
         return object : ScreenHandlerListener {
@@ -182,5 +182,13 @@ object  HexHelper {
                 )
             )
         }
+    }
+
+    @JvmStatic
+    fun modifyTooltip(text: MutableText, itemStack: ItemStack): MutableText {
+        if (getEnchantments(itemStack).filterIsInstance<AbstractHex>().isNotEmpty() || itemStack.item is TaintedItem<*>) {
+            return text.bold().darkRed()
+        }
+        return text
     }
 }
