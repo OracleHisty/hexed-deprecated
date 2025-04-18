@@ -27,6 +27,10 @@ repositories {
 		name = "TerraformersMC"
 		url = uri("https://maven.terraformersmc.com/")
 	}
+
+	maven {
+		url = "https://api.modrinth.com/maven"
+	}
 }
 
 fabricApi {
@@ -45,6 +49,8 @@ dependencies {
 		exclude(group: "com.github.glitchfiend")
 		exclude(group: "net.fabricmc.fabric-api")
 	}
+
+	modCompileOnly("maven.modrinth:enchancement:mGY2pNFa")
 }
 
 processResources {

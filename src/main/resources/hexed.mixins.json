@@ -1,6 +1,7 @@
 {
   "required": true,
   "package": "net.backupcup.mixin",
+  "plugin": "net.backupcup.mixin.HexedMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BowItemMixin",
@@ -12,7 +13,8 @@
     "PersistentProjectileEntityMixin",
     "PlayerEntityMixin",
     "ServerPlayerEntityMixin",
-    "TridentEntityMixin"
+    "TridentEntityMixin",
+    "compat.EnchancementUtilMixin"
   ],
   "injectors": {
     "defaultRequire": 1
