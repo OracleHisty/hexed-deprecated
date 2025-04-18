@@ -10,6 +10,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import net.minecraft.world.WorldAccess
 
 fun PlayerEntity.sendTranslated(message: String) = this.sendMessage(Text.translatable(message))
 
@@ -32,7 +33,7 @@ fun MutableText.italic() = this.formatted(Formatting.ITALIC)
 
 operator fun BlockPos.plus(offset: BlockPos): BlockPos = this.add(offset)
 
-fun World.playBlockSound(pos: BlockPos, sound: SoundEvent, volume: Float, pitch: Float) = this.playSound(null, pos, sound, SoundCategory.BLOCKS, volume, pitch)
+fun WorldAccess.playBlockSound(pos: BlockPos, sound: SoundEvent, volume: Float = 1.0f, pitch: Float = 1.0f) = this.playSound(null, pos, sound, SoundCategory.BLOCKS, volume, pitch)
 
 val BlockEntity.validBlockState: BlockState?
     get() = this.world?.getBlockState(this.pos)

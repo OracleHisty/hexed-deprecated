@@ -32,7 +32,7 @@ class AccursedAltarBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(R
 
     fun getActiveState(): Boolean {
         markDirty()
-        return validBlockState?.let { it.block == RegisterBlocks.ACCURSED_ALTAR && it.lit } ?: false
+        return validBlockState?.let { it.block == RegisterBlocks.ACCURSED_ALTAR && it.active } ?: false
     }
 
     override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
@@ -48,14 +48,12 @@ class AccursedAltarBlockEntity(pos: BlockPos, state: BlockState) : BlockEntity(R
 
     override fun writeNbt(nbt: NbtCompound) {
         super.writeNbt(nbt)
-        nbt.putBoolean("active", isActive == true)
+        nbt.putBoolean("active", isActive)
     }
 
     override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
 
-    override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? {
-        return BlockEntityUpdateS2CPacket.create(this)
-    }
+    override fun toUpdatePacket(): Packet<ClientPlayPacketListener> = BlockEntityUpdateS2CPacket.create(this)
 
     companion object {
         val CANDLE_OFFSETS = listOf(
