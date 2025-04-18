@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnchancementUtil.class)
 public class EnchancementUtilMixin {
-    @Inject(method = "isEnchantmentAllowed(Lnet/minecraft/util/Identifier;)Z", at = @At("RETURN"), remap = false, cancellable = true)
+    @Inject(method = "isEnchantmentAllowed(Lnet/minecraft/util/Identifier;)Z", at = @At("RETURN"), cancellable = true)
     private static void checkIfHasHexEhnchantment(Identifier identifier, CallbackInfoReturnable<Boolean> cir) {
         if(Registries.ENCHANTMENT.get(identifier) instanceof AbstractHex) cir.setReturnValue(false);
     }
