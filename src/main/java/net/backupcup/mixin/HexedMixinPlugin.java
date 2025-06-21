@@ -21,11 +21,7 @@ public class HexedMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if(mixinClassName.endsWith("EnchancementUtilMixin")) {
-            return FabricLoader.getInstance().isModLoaded("enchancement");
-        }
-        
-        return true;
+        return !(mixinClassName.endsWith("EnchancementUtilMixin") && FabricLoader.getInstance().isModLoaded("enchancement"));
     }
 
     @Override

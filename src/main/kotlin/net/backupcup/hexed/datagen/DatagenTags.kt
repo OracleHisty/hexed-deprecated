@@ -1,16 +1,15 @@
 package net.backupcup.hexed.datagen
 
 import net.backupcup.hexed.register.RegisterBlocks
-import net.backupcup.hexed.register.RegisterItems
 import net.backupcup.hexed.register.RegisterSlagBlocks
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.registry.tag.ItemTags
 import java.util.concurrent.CompletableFuture
 
-class DatagenTagsBlocks(output: FabricDataOutput?,
+class DatagenTags
+    (output: FabricDataOutput?,
                   registriesFuture: CompletableFuture<RegistryWrapper.WrapperLookup>?
 ) : FabricTagProvider.BlockTagProvider(output, registriesFuture) {
     override fun configure(arg: RegistryWrapper.WrapperLookup?) {

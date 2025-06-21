@@ -17,44 +17,43 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.ScreenHandlerListener
 import net.minecraft.text.MutableText
-import net.minecraft.util.Formatting
 import net.minecraft.util.Identifier
 
 object  HexHelper {
     private val blockedHexList by lazy { generateHexAvailability() }
 
     private fun generateHexAvailability(): List<AbstractHex> = Hexed.getConfig()?.let { config ->
-        buildList {
+        buildList {// for some ungodly reason, its inverting the registering config in the hardcoded area. @TODO FIND SECTION THAT CAUSES UNINTENDED (inverse) REACTION TO PARAMETER
             if (!config.aflameHex.shouldRegister) add(RegisterEnchantments.AFLAME_HEX)
-            if (config.persecutedHex.shouldRegister) add(RegisterEnchantments.PERSECUTED_HEX)
-            if (config.ephemeralHex.shouldRegister) add(RegisterEnchantments.EPHEMERAL_HEX)
-            if (config.vindictiveHex.shouldRegister) add(RegisterEnchantments.VINDICTIVE_HEX)
-            if (config.traitorousHex.shouldRegister) add(RegisterEnchantments.TRAITOROUS_HEX)
-            if (config.displacedHex.shouldRegister) add(RegisterEnchantments.DISPLACED_HEX)
-            if (config.avertingHex.shouldRegister) add(RegisterEnchantments.AVERTING_HEX)
-            if (config.aquatiqueHex.shouldRegister) add(RegisterEnchantments.AQUATIQUE_HEX)
-            if (config.dynamiqueHex.shouldRegister) add(RegisterEnchantments.DYNAMIQUE_HEX)
-            if (config.ironcladHex.shouldRegister) add(RegisterEnchantments.IRONCLAD_HEX)
-            if (config.franticHex.shouldRegister) add(RegisterEnchantments.FRANTIC_HEX)
-            if (config.bloodthirstyHex.shouldRegister) add(RegisterEnchantments.BLOODTHIRSTY_HEX)
-            if (config.disfigurementHex.shouldRegister) add(RegisterEnchantments.DISFIGUREMENT_HEX)
-            if (config.metamorphosisHex.shouldRegister) add(RegisterEnchantments.METAMORPHOSIS_HEX)
-            if (config.divineHex.shouldRegister) add(RegisterEnchantments.DIVINE_HEX)
-            if (config.celebrationHex.shouldRegister) add(RegisterEnchantments.CELEBRATION_HEX)
-            if (config.flaringHex.shouldRegister) add(RegisterEnchantments.FLARING_HEX)
-            if (config.lingerHex.shouldRegister) add(RegisterEnchantments.LINGER_HEX)
-            if (config.seizeHex.shouldRegister) add(RegisterEnchantments.SEIZE_HEX)
-            if (config.sepultureHex.shouldRegister) add(RegisterEnchantments.SEPULTURE_HEX)
-            if (config.ruinousHex.shouldRegister) add(RegisterEnchantments.RUINOUS_HEX)
-            if (config.amplifyHex.shouldRegister) add(RegisterEnchantments.AMPLIFY_HEX)
-            if (config.overburdenHex.shouldRegister) add(RegisterEnchantments.OVERBURDEN_HEX)
-            if (config.famishmentHex.shouldRegister) add(RegisterEnchantments.FAMISHMENT_HEX)
-            if (config.aggravateHex.shouldRegister) add(RegisterEnchantments.AGGRAVATE_HEX)
-            if (config.volatilityHex.shouldRegister) add(RegisterEnchantments.VOLATILITY_HEX)
-            if (config.phasedHex.shouldRegister) add(RegisterEnchantments.PHASED_HEX)
-            if (config.overclockHex.shouldRegister) add(RegisterEnchantments.OVERCLOCK_HEX)
-            if (config.provisionHex.shouldRegister) add(RegisterEnchantments.PROVISION_HEX)
-            if (config.resentfulHex.shouldRegister) add(RegisterEnchantments.RESENTFUL_HEX)
+            if (!config.persecutedHex.shouldRegister) add(RegisterEnchantments.PERSECUTED_HEX)
+            if (!config.ephemeralHex.shouldRegister) add(RegisterEnchantments.EPHEMERAL_HEX)
+            if (!config.vindictiveHex.shouldRegister) add(RegisterEnchantments.VINDICTIVE_HEX)
+            if (!config.traitorousHex.shouldRegister) add(RegisterEnchantments.TRAITOROUS_HEX)
+            if (!config.displacedHex.shouldRegister) add(RegisterEnchantments.DISPLACED_HEX)
+            if (!config.avertingHex.shouldRegister) add(RegisterEnchantments.AVERTING_HEX)
+            if (!config.aquatiqueHex.shouldRegister) add(RegisterEnchantments.AQUATIQUE_HEX)
+            if (!config.dynamiqueHex.shouldRegister) add(RegisterEnchantments.DYNAMIQUE_HEX)
+            if (!config.ironcladHex.shouldRegister) add(RegisterEnchantments.IRONCLAD_HEX)
+            if (!config.franticHex.shouldRegister) add(RegisterEnchantments.FRANTIC_HEX)
+            if (!config.bloodthirstyHex.shouldRegister) add(RegisterEnchantments.BLOODTHIRSTY_HEX)
+            if (!config.disfigurementHex.shouldRegister) add(RegisterEnchantments.DISFIGUREMENT_HEX)
+            if (!config.metamorphosisHex.shouldRegister) add(RegisterEnchantments.METAMORPHOSIS_HEX)
+            if (!config.divineHex.shouldRegister) add(RegisterEnchantments.DIVINE_HEX)
+            if (!config.celebrationHex.shouldRegister) add(RegisterEnchantments.CELEBRATION_HEX)
+            if (!config.flaringHex.shouldRegister) add(RegisterEnchantments.FLARING_HEX)
+            if (!config.lingerHex.shouldRegister) add(RegisterEnchantments.LINGER_HEX)
+            if (!config.seizeHex.shouldRegister) add(RegisterEnchantments.SEIZE_HEX)
+            if (!config.sepultureHex.shouldRegister) add(RegisterEnchantments.SEPULTURE_HEX)
+            if (!config.ruinousHex.shouldRegister) add(RegisterEnchantments.RUINOUS_HEX)
+            if (!config.amplifyHex.shouldRegister) add(RegisterEnchantments.AMPLIFY_HEX)
+            if (!config.overburdenHex.shouldRegister) add(RegisterEnchantments.OVERBURDEN_HEX)
+            if (!config.famishmentHex.shouldRegister) add(RegisterEnchantments.FAMISHMENT_HEX)
+            if (!config.aggravateHex.shouldRegister) add(RegisterEnchantments.AGGRAVATE_HEX)
+            if (!config.volatilityHex.shouldRegister) add(RegisterEnchantments.VOLATILITY_HEX)
+            if (!config.phasedHex.shouldRegister) add(RegisterEnchantments.PHASED_HEX)
+            if (!config.overclockHex.shouldRegister) add(RegisterEnchantments.OVERCLOCK_HEX)
+            if (!config.provisionHex.shouldRegister) add(RegisterEnchantments.PROVISION_HEX)
+            if (!config.resentfulHex.shouldRegister) add(RegisterEnchantments.RESENTFUL_HEX)
         }
     } ?: emptyList()
 

@@ -12,5 +12,6 @@ object HexedDataGenerator : DataGeneratorEntrypoint {
 		pack.addProvider(::DatagenLoot)
 		//pack.addProvider(::DatagenTagsItems)
 		//pack.addProvider(::DatagenModels)
+		pack.addProvider(::DatagenTags)
 	}
 }

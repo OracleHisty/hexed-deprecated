@@ -14,8 +14,5 @@ object RegisterTags {
     val CALAMITOUS_ARMOR: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(Hexed.MOD_ID, "calamitous_armor"))
 
     fun registerTags() {
-        HEX_ENCHANTMENTS
-        PERSISTENT_DEBUFFS
-        CALAMITOUS_ARMOR
     }
 }
