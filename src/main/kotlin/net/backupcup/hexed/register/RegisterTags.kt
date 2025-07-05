@@ -12,7 +12,7 @@ object RegisterTags {
     val HEX_ENCHANTMENTS: TagKey<Enchantment> = TagKey.of(RegistryKeys.ENCHANTMENT, Identifier(Hexed.MOD_ID, "hex_enchantments"))
     val PERSISTENT_DEBUFFS: TagKey<StatusEffect> = TagKey.of(RegistryKeys.STATUS_EFFECT, Identifier(Hexed.MOD_ID, "persistent_debuffs"))
     val CALAMITOUS_ARMOR: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(Hexed.MOD_ID, "calamitous_armor"))
-
+    val ALTAR_CATALYST:  TagKey<Item> = TagKey.of(RegistryKeys.ITEM, Identifier(Hexed.MOD_ID, "altar_catalysts"))
     fun registerTags() {
     }
 }

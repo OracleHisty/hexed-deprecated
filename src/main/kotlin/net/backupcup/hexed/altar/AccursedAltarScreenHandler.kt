@@ -7,6 +7,7 @@ import net.backupcup.hexed.register.RegisterItems
 import net.backupcup.hexed.register.RegisterScreenHandlers
 import net.backupcup.hexed.register.RegisterSounds
 import net.backupcup.hexed.register.RegisterStats
+import net.backupcup.hexed.register.RegisterTags
 import net.backupcup.hexed.util.*
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
@@ -17,6 +18,8 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.tag.ItemTags
+import net.minecraft.registry.tag.TagManagerLoader
 import net.minecraft.screen.Property
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
@@ -76,7 +79,7 @@ class AccursedAltarScreenHandler(
 
         this.addSlot(object: Slot(inventory, 0, 18, 20) {
             override fun canInsert(stack: ItemStack): Boolean {
-                return stack.isOf(RegisterItems.BRIMSTONE_CRYSTAL)
+                return stack.isIn(RegisterTags.ALTAR_CATALYST)
             }
         })
 
