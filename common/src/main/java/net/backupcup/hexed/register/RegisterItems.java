@@ -30,6 +30,10 @@ public final class RegisterItems {
         Component.translatable("tooltip.hexed.brimstone_crystal.line_2").withStyle(ChatFormatting.GRAY),
         Component.translatable("tooltip.hexed.brimstone_crystal.line_3").withStyle(ChatFormatting.GRAY))));
 
+    // No recipe on purpose; it's crafted however the pack decides.
+    public static final RegObject<Item> BRIMSTONE_FLINT_AND_STEEL = item("brimstone_flint_and_steel",
+        () -> new BrimstoneFlintAndSteelItem(new Item.Properties().durability(64)));
+
     //ARMOR
     public static final RegObject<Item> CALAMITOUS_HELMET = item("calamitous_hood", () -> new CalamitousArmorItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegObject<Item> CALAMITOUS_CHESTPLATE = item("calamitous_robes", () -> new CalamitousArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));

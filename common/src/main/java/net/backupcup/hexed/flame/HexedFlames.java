@@ -17,10 +17,13 @@ public final class HexedFlames {
     public static final String PROMETHEUS = "prometheus";
     public static final String DYED_FLAMES = "dyedflames";
 
-    /** Each flame's textures are {@code hexed:block/<name>_fire_0} and {@code _fire_1}. */
+    /**
+     * Each flame's textures are {@code hexed:block/<name>_fire_0} and {@code _fire_1}. Brimstone is the cream flame of
+     * Brimstone Fire and Blazing Magma.
+     */
     public enum Flame {
         AFLAME("aflame"),
-        BLAZING_MAGMA("blazing_magma");
+        BRIMSTONE("brimstone");
 
         private final ResourceLocation id;
 
@@ -35,7 +38,7 @@ public final class HexedFlames {
 
     /** How one flame mod is told which flame an entity shows. */
     public interface Backend {
-        /** Called once during mod initialization. */
+        /** Called once, after blocks are registered. */
         void register();
 
         /** Makes the entity's flames use this flame's textures. Must be cheap to repeat. */
@@ -72,8 +75,15 @@ public final class HexedFlames {
         } else {
             return;
         }
-        backend.register();
         Hexed.LOGGER.info("Using {} for custom flames", backendMod);
+    }
+
+    /**
+     * Registers the flames with the flame mod. Called by each loader once blocks are registered (right after init on
+     * Fabric, at common setup on NeoForge), since a flame can name its fire block.
+     */
+    public static void registerFlames() {
+        if (backend != null) backend.register();
     }
 
     private static Backend create(String className) {

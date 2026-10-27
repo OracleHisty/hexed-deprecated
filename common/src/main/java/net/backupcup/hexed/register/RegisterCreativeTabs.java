@@ -28,6 +28,7 @@ public final class RegisterCreativeTabs {
 
                 output.accept(RegisterBlocks.BRIMSTONE_CANDLE.get());
                 output.accept(RegisterBlocks.LICHLORE_CANDLE.get());
+                output.accept(RegisterItems.BRIMSTONE_FLINT_AND_STEEL.get());
 
                 for (RegObject<Item> tainted : RegisterItems.tainted()) {
                     output.accept(tainted.get());

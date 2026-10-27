@@ -1,6 +1,7 @@
 package net.backupcup.hexed.neoforge.gametest;
 
 import net.backupcup.hexed.Hexed;
+import net.backupcup.hexed.gametest.HexedBrimstoneFireTest;
 import net.backupcup.hexed.gametest.HexedFlameTest;
 import net.backupcup.hexed.gametest.HexedSmokeTest;
 import net.minecraft.gametest.framework.GameTest;
@@ -23,5 +24,10 @@ public class HexedNeoForgeGameTests {
     @GameTest(template = "empty")
     public static void flames(GameTestHelper helper) {
         HexedFlameTest.run(helper);
+    }
+
+    @GameTest(template = "empty")
+    public static void brimstoneFire(GameTestHelper helper) {
+        HexedBrimstoneFireTest.run(helper);
     }
 }

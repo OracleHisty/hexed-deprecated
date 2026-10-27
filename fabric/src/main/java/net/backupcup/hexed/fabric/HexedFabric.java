@@ -28,6 +28,7 @@ public class HexedFabric implements ModInitializer {
         if (HexedFlames.activeMod() == null) {
             throw new IllegalStateException(HexedFlames.missingMessage());
         }
+        HexedFlames.registerFlames();
 
         for (HexedNetwork.Entry<?> entry : HexedNetwork.CLIENTBOUND) {
             registerClientbound(entry);

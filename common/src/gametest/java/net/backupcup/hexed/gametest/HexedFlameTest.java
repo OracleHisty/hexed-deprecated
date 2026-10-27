@@ -13,6 +13,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.monster.Husk;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 
@@ -39,7 +40,8 @@ public final class HexedFlameTest {
         AflameMobEffect.apply(robed, 100, 0, null);
         helper.assertFalse(robed.hasEffect(RegisterStatusEffects.AFLAME.holder()), "The Calamitous set should block Aflame");
 
-        Zombie zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, BlockPos.ZERO.above());
+        // Husks don't burn in daylight, which would otherwise set real fire.
+        Husk zombie = helper.spawnWithNoFreeWill(EntityType.HUSK, BlockPos.ZERO.above());
         AflameMobEffect.apply(zombie, 100, 0, null);
         helper.assertTrue(zombie.hasEffect(RegisterStatusEffects.AFLAME.holder()), "Aflame wasn't applied");
 

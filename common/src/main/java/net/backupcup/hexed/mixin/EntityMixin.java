@@ -26,7 +26,7 @@ public abstract class EntityMixin {
     private void hexed$blazingMagmaFlames(CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
         if (!self.level().isClientSide() && self.isOnFire() && HexedFlames.isInBlazingMagma(self)) {
-            HexedFlames.show(self, HexedFlames.Flame.BLAZING_MAGMA);
+            HexedFlames.show(self, HexedFlames.Flame.BRIMSTONE);
         }
     }
 }

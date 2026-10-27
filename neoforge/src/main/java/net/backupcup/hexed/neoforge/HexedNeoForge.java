@@ -14,6 +14,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingException;
 import net.neoforged.fml.ModLoadingIssue;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.LootTableLoadEvent;
@@ -37,6 +38,7 @@ public class HexedNeoForge {
         }
 
         modBus.addListener(RegisterEvent.class, NeoForgePlatform::onRegister);
+        modBus.addListener(FMLCommonSetupEvent.class, event -> event.enqueueWork(HexedFlames::registerFlames));
         modBus.addListener(RegisterPayloadHandlersEvent.class, HexedNeoForge::registerPayloads);
         modBus.addListener(EntityAttributeCreationEvent.class,
             event -> event.put(RegisterEntities.BLAZING_SKULL.get(), BlazingSkullEntity.createAttributes().build()));

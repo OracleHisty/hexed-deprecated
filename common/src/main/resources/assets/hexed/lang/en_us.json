@@ -29,6 +29,8 @@
 
   "block.hexed.accursed_altar": "Altar of the Accursed",
   "block.hexed.aflame_flame": "Aflame Flame",
+  "block.hexed.brimstone_fire": "Brimstone Fire",
+  "item.hexed.brimstone_flint_and_steel": "Brimstone Flint and Steel",
 
   "block.hexed.skeleton_skull_candle": "Skeleton Skull Candle",
   "block.hexed.wither_skull_candle": "Wither Skull Candle",

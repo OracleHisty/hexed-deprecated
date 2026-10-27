@@ -8,7 +8,11 @@ Aflame rework:
 - Aflame is now its own burn with crimson flames and its own damage type, instead of normal fire on the wielder and Ablaze on the target
 - It burns both the target and the wielder, for separate durations (`targetDuration`/`userDuration` in the config; old configs are updated automatically)
 - It gets through effect immunity (bosses included); only the full Calamitous set protects from it
-- Blazing Magma sets things on fire with its own pale gold flames
+
+Brimstone Fire:
+- Fire lit on top of brimstone blocks (`#hexed:brimstone_fire_base_blocks`) becomes Brimstone Fire, like Soul Fire on soul sand, burning things with cream flames
+- Blazing Magma burns things with the same cream flames
+- New Brimstone Flint and Steel lights Brimstone Fire on any block with a solid top (no recipe yet)
 
 Bug Fixes:
 - Disabling a hex with `shouldRegister: false` now only removes that hex from the altar (previously every hex except Aflame was hidden)

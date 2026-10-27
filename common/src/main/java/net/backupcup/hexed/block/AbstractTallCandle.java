@@ -10,6 +10,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -91,11 +92,12 @@ public abstract class AbstractTallCandle extends Block {
         if (stack.is(Items.DEBUG_STICK)) return ItemInteractionResult.CONSUME;
         if (!player.getAbilities().mayBuild) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 
-        if ((stack.is(Items.FLINT_AND_STEEL) || stack.is(Items.FIRE_CHARGE)) && !state.getValue(LIT)) {
+        boolean flintAndSteel = stack.getItem() instanceof FlintAndSteelItem;
+        if ((flintAndSteel || stack.is(Items.FIRE_CHARGE)) && !state.getValue(LIT)) {
             setLit(level, pos, state, true);
             player.playSound(SoundEvents.FIRECHARGE_USE, 1f, 1f);
             if (!player.isCreative()) {
-                if (stack.is(Items.FLINT_AND_STEEL)) {
+                if (flintAndSteel) {
                     stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
                 } else {
                     stack.shrink(1);

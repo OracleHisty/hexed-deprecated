@@ -1,8 +1,10 @@
 package net.backupcup.hexed.compat.flame;
 
+import it.crystalnest.prometheus.api.Fire;
 import it.crystalnest.prometheus.api.FireManager;
 import it.crystalnest.prometheus.api.type.FireTypeSynched;
 import net.backupcup.hexed.flame.HexedFlames;
+import net.backupcup.hexed.register.RegisterBlocks;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.Entity;
 
@@ -13,10 +15,12 @@ import net.minecraft.world.entity.Entity;
 public class PrometheusFlameBackend implements HexedFlames.Backend {
     @Override
     public void register() {
-        for (HexedFlames.Flame flame : HexedFlames.Flame.values()) {
-            // No components: Hexed adds no Prometheus torches, campfires or fire blocks.
-            FireManager.registerFire(FireManager.fireBuilder(flame.id()).build());
-        }
+        // No other components: Hexed adds no Prometheus torches, campfires or lanterns.
+        FireManager.registerFire(FireManager.fireBuilder(HexedFlames.Flame.AFLAME.id()).build());
+        // Naming Brimstone Fire as the source block makes Prometheus give anything burning in it this fire type.
+        FireManager.registerFire(FireManager.fireBuilder(HexedFlames.Flame.BRIMSTONE.id())
+            .setComponent(Fire.Component.SOURCE_BLOCK, RegisterBlocks.BRIMSTONE_FIRE.id())
+            .build());
     }
 
     @Override

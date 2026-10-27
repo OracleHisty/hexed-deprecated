@@ -3,6 +3,7 @@ package net.backupcup.hexed.register;
 import net.backupcup.hexed.altar.AccursedAltarBlock;
 import net.backupcup.hexed.block.AbstractTallCandle;
 import net.backupcup.hexed.block.BrimstoneCandle;
+import net.backupcup.hexed.block.BrimstoneFireBlock;
 import net.backupcup.hexed.block.LichloreCandle;
 import net.backupcup.hexed.registry.Reg;
 import net.backupcup.hexed.registry.RegObject;
@@ -10,6 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -45,6 +47,11 @@ public final class RegisterBlocks {
         .mapColor(MapColor.CRIMSON_HYPHAE)
         .noOcclusion()
         .pushReaction(PushReaction.BLOCK))));
+
+    public static final RegObject<Block> BRIMSTONE_FIRE = cutout(Reg.register(BuiltInRegistries.BLOCK, "brimstone_fire",
+        () -> new BrimstoneFireBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_FIRE)
+            .mapColor(MapColor.COLOR_YELLOW)
+            .lightLevel(state -> 15))));
 
     /**
      * Never placed in the world: it only stands in as the fire source for Aflame's flames when Dyed Flames draws them.

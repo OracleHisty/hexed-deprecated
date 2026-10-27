@@ -6,10 +6,15 @@
     }
   ],
   "values": {
+    "hexed:brimstone_fire": {
+      "particle": "minecraft:lava",
+      "texture0": "hexed:block/brimstone_fire_0",
+      "texture1": "hexed:block/brimstone_fire_1"
+    },
     "hexed:blazing_magma": {
       "particle": "minecraft:lava",
-      "texture0": "hexed:block/blazing_magma_fire_0",
-      "texture1": "hexed:block/blazing_magma_fire_1"
+      "texture0": "hexed:block/brimstone_fire_0",
+      "texture1": "hexed:block/brimstone_fire_1"
     },
     "hexed:aflame_flame": {
       "particle": "minecraft:crimson_spore",

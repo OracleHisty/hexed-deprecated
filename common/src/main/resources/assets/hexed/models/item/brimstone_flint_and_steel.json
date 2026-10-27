@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hexed:item/brimstone_flint_and_steel"
+  }
+}
