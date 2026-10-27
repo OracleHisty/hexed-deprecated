@@ -1,5 +1,6 @@
 Port to Minecraft 1.21.1, for Fabric and NeoForge:
 - Hexes are now data-driven enchantments (`data/hexed/enchantment`), all part of the `#hexed:hex_enchantments` tag
+- Hexes are their own kind of enchantment instead of curses (no longer in `#minecraft:curse`). They show in dark red on tooltips, and the grindstone still keeps them and gives no experience for them
 - The existing config file keeps working; it is still synced from the server
 - Fabric Language Kotlin is no longer required
 - Requires one flame mod, either [Prometheus](https://modrinth.com/mod/prometheus-api) or [Dyed Flames](https://modrinth.com/mod/dyed-flames); Prometheus is used if both are installed

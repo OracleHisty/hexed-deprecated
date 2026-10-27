@@ -3,6 +3,7 @@ package net.backupcup.hexed.gametest;
 import net.backupcup.hexed.Hexed;
 import net.backupcup.hexed.hex.HexHelper;
 import net.backupcup.hexed.hex.Hexes;
+import net.backupcup.hexed.register.RegisterTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -10,6 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
@@ -39,6 +41,10 @@ public final class HexedSmokeTest {
 
         for (ResourceKey<Enchantment> hex : Hexes.ALL) {
             helper.assertTrue(HexHelper.lookup(level.registryAccess(), hex).isPresent(), "Missing hex enchantment " + hex.location());
+            Holder<Enchantment> holder = holder(level, hex);
+            helper.assertTrue(holder.is(RegisterTags.HEX_ENCHANTMENTS), hex.location() + " should be in #hexed:hex_enchantments");
+            helper.assertFalse(holder.is(EnchantmentTags.CURSE), hex.location() + " shouldn't be a curse");
+            helper.assertTrue(holder.is(EnchantmentTags.TREASURE), hex.location() + " should still be treasure");
         }
         helper.assertTrue(Hexes.ALL.size() == 30, "Expected 30 hexes, found " + Hexes.ALL.size());
 
