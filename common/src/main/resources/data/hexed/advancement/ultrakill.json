@@ -1,0 +1,109 @@
+{
+  "parent": "hexed:get_altar",
+  "display": {
+    "title": {
+      "translate": "advancements.hexed.ultrakill.title",
+      "color": "gold",
+      "bold": true
+    },
+    "description": {
+      "translate": "advancements.hexed.ultrakill.description"
+    },
+    "icon": {
+      "id": "minecraft:player_head",
+      "components": {
+        "minecraft:profile": {
+          "id": [
+            -1222965136,
+            -1319873449,
+            -2069878945,
+            1794942959
+          ],
+          "properties": [
+            {
+              "name": "textures",
+              "value": "e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzY0MTdiYWE2NzI2NmM4NjEyNzQ5NzQ2NjBhMTVhZmExNWM3MjlhMzQxNzRkNjhlNWE1NDhmNTk5ZjBhMTVhNyJ9fX0="
+            }
+          ]
+        }
+      }
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "metamorphosis": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "predicates": {
+              "minecraft:enchantments": [
+                {
+                  "enchantments": "hexed:metamorphosis",
+                  "levels": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "bloodthirsty": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "predicates": {
+              "minecraft:enchantments": [
+                {
+                  "enchantments": "hexed:bloodthirsty",
+                  "levels": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ironclad": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "predicates": {
+              "minecraft:enchantments": [
+                {
+                  "enchantments": "hexed:ironclad",
+                  "levels": {
+                    "min": 1,
+                    "max": 1
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "metamorphosis"
+    ],
+    [
+      "bloodthirsty"
+    ],
+    [
+      "ironclad"
+    ]
+  ]
+}

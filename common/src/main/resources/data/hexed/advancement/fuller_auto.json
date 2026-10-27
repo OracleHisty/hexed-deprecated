@@ -1,0 +1,36 @@
+{
+  "parent": "hexed:get_altar",
+  "display": {
+    "title": {
+      "text": "Fuller Auto",
+      "bold": true
+    },
+    "description": {
+      "text": "Reach the maximum level of Overheat on a Crossbow"
+    },
+    "icon": {
+      "id": "minecraft:crossbow"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "fullOverheat": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:crossbow"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "fullOverheat"
+    ]
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "hexed:smooth_brimstone_slag"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "id": "hexed:smooth_brimstone_slag_stairs",
+    "count": 4
+  },
+  "show_notification": true
+}

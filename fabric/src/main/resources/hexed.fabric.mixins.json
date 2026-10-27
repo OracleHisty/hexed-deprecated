@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.backupcup.hexed.fabric.mixin",
+  "plugin": "net.backupcup.hexed.fabric.mixin.HexedFabricMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "compat.EnchancementUtilMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

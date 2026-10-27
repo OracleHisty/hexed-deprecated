@@ -1,0 +1,65 @@
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev'
+}
+
+// Dev-only smoke tests (see common/src/gametest). Not included in the mod jar.
+sourceSets {
+    gametest {
+        java.srcDir project(':common').file('src/gametest/java')
+        resources.srcDir project(':common').file('src/gametest/resources')
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+neoForge {
+    version = neoforge_version
+    addModdingDependenciesTo(sourceSets.gametest)
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})"
+        }
+        client {
+            client()
+            gameDirectory = file('runs/client')
+        }
+        server {
+            server()
+            gameDirectory = file('runs/server')
+        }
+        // Headless server that runs the smoke GameTests (common/src/gametest) and exits.
+        gameTestServer {
+            type = 'gameTestServer'
+            gameDirectory = file('runs/gametest')
+            sourceSet = sourceSets.gametest
+            systemProperty('mixin.debug.verify', 'true')
+            systemProperty('mixin.debug.export', 'true')
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+        "${mod_id}_gametest" {
+            sourceSet sourceSets.gametest
+        }
+    }
+}
+
+dependencies {
+    // Jankson is a plain library; NeoForge loads jar-in-jar libraries onto the game layer.
+    jarJar(implementation("blue.endless:jankson")) {
+        version {
+            strictly "[${jankson_version},2.0)"
+            prefer jankson_version
+        }
+    }
+    // In dev the jar-in-jar isn't unpacked, so the library has to be put on the game's classpath explicitly.
+    additionalRuntimeClasspath "blue.endless:jankson:${jankson_version}"
+}

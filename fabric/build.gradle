@@ -1,0 +1,72 @@
+plugins {
+    id 'multiloader-loader'
+    id 'fabric-loom'
+}
+
+repositories {
+    maven {
+        name = 'TerraformersMC'
+        url = uri('https://maven.terraformersmc.com/')
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    include(implementation("blue.endless:jankson:${jankson_version}"))
+
+    // Optional compat, see compat/EnchancementUtilMixin
+    modCompileOnly "maven.modrinth:enchancement:${enchancement_version}"
+}
+
+// Dev-only smoke tests (see common/src/gametest). Not included in the mod jar.
+sourceSets {
+    gametest {
+        java.srcDir project(':common').file('src/gametest/java')
+        resources.srcDir project(':common').file('src/gametest/resources')
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+loom {
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+        "${mod_id}_gametest" {
+            sourceSet sourceSets.gametest
+        }
+    }
+    def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
+    if (aw.exists()) {
+        accessWidenerPath.set(aw)
+    }
+    runs {
+        client {
+            client()
+            setConfigName('Fabric Client')
+            ideConfigGenerated(true)
+            runDir('runs/client')
+        }
+        server {
+            server()
+            setConfigName('Fabric Server')
+            ideConfigGenerated(true)
+            runDir('runs/server')
+        }
+        // Headless server that runs the smoke GameTests (common/src/gametest) and exits.
+        gametest {
+            server()
+            setConfigName('Fabric GameTest')
+            vmArg('-Dfabric-api.gametest')
+            vmArg('-Dmixin.debug.verify=true')
+            vmArg('-Dmixin.debug.export=true')
+            runDir('runs/gametest')
+            source(sourceSets.gametest)
+        }
+    }
+}

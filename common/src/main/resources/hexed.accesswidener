@@ -1,0 +1,10 @@
+accessWidener	v2	named
+
+accessible class net/minecraft/client/gui/Gui$HeartType
+
+# Also opened up by Fabric API; listed so the build doesn't depend on which modules widen what
+accessible method net/minecraft/world/level/block/LiquidBlock <init> (Lnet/minecraft/world/level/material/FlowingFluid;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V
+accessible method net/minecraft/world/level/block/StairBlock <init> (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V
+accessible method net/minecraft/world/inventory/MenuType <init> (Lnet/minecraft/world/inventory/MenuType$MenuSupplier;Lnet/minecraft/world/flag/FeatureFlagSet;)V
+accessible class net/minecraft/world/inventory/MenuType$MenuSupplier
+accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier

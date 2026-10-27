@@ -1,0 +1,74 @@
+{
+  "display": {
+    "title": {
+      "text": "Fanciest Witch in the Wild West"
+    },
+    "description": {
+      "text": "Craft the full Calamitous Robes set"
+    },
+    "icon": {
+      "id": "hexed:calamitous_hood"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "get_hood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "hexed:calamitous_hood"
+          }
+        ]
+      }
+    },
+    "get_robes": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "hexed:calamitous_robes"
+          }
+        ]
+      }
+    },
+    "get_cassock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "hexed:calamitous_cassock"
+          }
+        ]
+      }
+    },
+    "get_boots": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "hexed:calamitous_boots"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_hood"
+    ],
+    [
+      "get_robes"
+    ],
+    [
+      "get_cassock"
+    ],
+    [
+      "get_boots"
+    ]
+  ],
+  "parent": "hexed:find_fabric"
+}

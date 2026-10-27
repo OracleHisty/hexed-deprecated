@@ -5,8 +5,10 @@ on: [ workflow_dispatch ]
 env:
   MOD_NAME: "Hexed"
   VERSION: "0.8.3"
-  MINECRAFT_VERSION: "1.20.1"
-  JAVA_VERSION: 17
+  MINECRAFT_VERSION: "1.21.1"
+  # The mod targets Java 21; Gradle itself (Fabric Loom) needs a Java 25 JVM to run.
+  JAVA_VERSION: 21
+  GRADLE_JAVA_VERSION: 25
   VERSION_TYPE: beta
 
   CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
@@ -17,32 +19,19 @@ permissions:
   contents: write
 
 jobs:
-  set_release_name:
-    runs-on: ubuntu-latest
-    outputs:
-      RELEASE_NAME: ${{ steps.set_release_name.outputs.RELEASE_NAME }}
-    steps:
-      - name: Set Release Name
-        id: set_release_name
-        run: echo "::set-output name=RELEASE_NAME::${{ env.MOD_NAME }} ${{ env.VERSION }}+MC${{ env.MINECRAFT_VERSION }}"
-
   build:
-    needs: set_release_name
     runs-on: ubuntu-latest
     steps:
-      - name: Check Environment Variables
-        run: env
-
       - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          submodules: true
+        uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: "temurin"
-          java-version: ${{env.JAVA_VERSION}}
+          java-version: |
+            ${{ env.JAVA_VERSION }}
+            ${{ env.GRADLE_JAVA_VERSION }}
 
       - name: Make Gradle Wrapper Executable
         if: ${{ runner.os != 'Windows' }}
@@ -51,24 +40,58 @@ jobs:
       - name: Build
         run: ./gradlew clean build
 
-      - name: Publish
+      - name: Smoke Test (Fabric)
+        run: ./gradlew :fabric:runGametest
+
+      - name: Smoke Test (NeoForge)
+        run: ./gradlew :neoforge:runGameTestServer
+
+      - name: Publish (Fabric)
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          curseforge-id: 996912
-          curseforge-token: "${{env.CURSEFORGE_TOKEN}}"
+          files: fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
 
-          github-tag: "v${{env.VERSION}}+${{ env.MINECRAFT_VERSION }}"
-          github-token: "${{env.GITHUB_TOKEN}}"
+          curseforge-id: 996912
+          curseforge-token: "${{ env.CURSEFORGE_TOKEN }}"
+
+          github-tag: "v${{ env.VERSION }}+${{ env.MINECRAFT_VERSION }}"
+          github-token: "${{ env.GITHUB_TOKEN }}"
 
           modrinth-id: wUMNoII3
-          modrinth-token: "${{env.MODRINTH_TOKEN}}"
+          modrinth-token: "${{ env.MODRINTH_TOKEN }}"
           modrinth-featured: true
 
-          name: "${{ needs.set_release_name.outputs.RELEASE_NAME }}"
-          version: "${{env.VERSION}}"
-          version-type: "${{env.VERSION_TYPE}}"
+          name: "${{ env.MOD_NAME }} ${{ env.VERSION }}+MC${{ env.MINECRAFT_VERSION }} (Fabric)"
+          version: "${{ env.VERSION }}+fabric"
+          version-type: "${{ env.VERSION_TYPE }}"
           changelog-file: CHANGELOG.md
 
           loaders: fabric
-          game-versions: "${{env.MINECRAFT_VERSION}}"
-          java: "${{env.JAVA_VERSION}}"
+          game-versions: "${{ env.MINECRAFT_VERSION }}"
+          java: "${{ env.JAVA_VERSION }}"
+          dependencies: |
+            fabric-api(required)
+
+      - name: Publish (NeoForge)
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          files: neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
+
+          curseforge-id: 996912
+          curseforge-token: "${{ env.CURSEFORGE_TOKEN }}"
+
+          github-tag: "v${{ env.VERSION }}+${{ env.MINECRAFT_VERSION }}"
+          github-token: "${{ env.GITHUB_TOKEN }}"
+
+          modrinth-id: wUMNoII3
+          modrinth-token: "${{ env.MODRINTH_TOKEN }}"
+          modrinth-featured: true
+
+          name: "${{ env.MOD_NAME }} ${{ env.VERSION }}+MC${{ env.MINECRAFT_VERSION }} (NeoForge)"
+          version: "${{ env.VERSION }}+neoforge"
+          version-type: "${{ env.VERSION_TYPE }}"
+          changelog-file: CHANGELOG.md
+
+          loaders: neoforge
+          game-versions: "${{ env.MINECRAFT_VERSION }}"
+          java: "${{ env.JAVA_VERSION }}"

@@ -1,0 +1,15 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "Timefall Development License 1.2"
+
+[[mods]]
+modId = "hexed_gametest"
+version = "1.0.0"
+displayName = "Hexed GameTests"
+
+[[dependencies.hexed_gametest]]
+modId = "hexed"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"

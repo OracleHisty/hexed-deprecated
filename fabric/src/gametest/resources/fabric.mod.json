@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "hexed_gametest",
+  "version": "1.0.0",
+  "name": "Hexed GameTests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "net.backupcup.hexed.fabric.gametest.HexedFabricGameTests"
+    ]
+  },
+  "depends": {
+    "hexed": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}

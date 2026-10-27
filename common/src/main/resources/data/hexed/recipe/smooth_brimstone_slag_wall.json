@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "hexed:smooth_brimstone_slag"
+    }
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "hexed:smooth_brimstone_slag_wall",
+    "count": 6
+  },
+  "show_notification": true
+}

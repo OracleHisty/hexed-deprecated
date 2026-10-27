@@ -1,0 +1,28 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.backupcup.hexed.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractArrowMixin",
+    "BowItemMixin",
+    "CrossbowItemMixin",
+    "EnchantmentHelperMixin",
+    "ItemStackMixin",
+    "LivingEntityMixin",
+    "LootTableMixin",
+    "PlayerMixin",
+    "ProjectileWeaponItemMixin",
+    "ServerPlayerMixin",
+    "ThrownTridentMixin"
+  ],
+  "client": [
+    "client.ClientLivingEntityMixin",
+    "client.GuiMixin",
+    "client.ItemRendererMixin",
+    "client.MinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

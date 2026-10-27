@@ -28,7 +28,7 @@ These powerful enchantments offer unique mechanics that can turn the tide of any
 ## ![Banner in a style of ink writing indicating the start of the Compatability section](https://www.bisecthosting.com/images/CF/Hexed/BH_HEX_comp.webp)
 
 For the most part, Hexed is compatible with all the mods, there is an exception however:
- - Because in the code, Hexes count as curses, **Enchancement** will override hexes if you don't have a Curse Patch for it.
+ - Hexes are tagged as curses. On Fabric, Hexed tells **Enchancement** to always allow them, so no extra patch is needed.
 
 ## ![Banner in a style of ink writing indicating the start of the FAQ section](https://www.bisecthosting.com/images/CF/Hexed/BH_HEX_faq.webp)
 

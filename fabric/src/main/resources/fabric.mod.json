@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/project/hexed",
+    "sources": "https://github.com/BackupCup/hexed"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/hexed/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.backupcup.hexed.fabric.HexedFabric"
+    ],
+    "client": [
+      "net.backupcup.hexed.fabric.HexedFabricClient"
+    ]
+  },
+  "accessWidener": "${mod_id}.accesswidener",
+  "mixins": [
+    "${mod_id}.mixins.json",
+    "${mod_id}.fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_min_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=${java_version}",
+    "fabric-api": "*"
+  }
+}
