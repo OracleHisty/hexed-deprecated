@@ -8,6 +8,7 @@
     "BowItemMixin",
     "CrossbowItemMixin",
     "EnchantmentHelperMixin",
+    "EntityMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "LootTableMixin",
@@ -20,7 +21,8 @@
     "client.ClientLivingEntityMixin",
     "client.GuiMixin",
     "client.ItemRendererMixin",
-    "client.MinecraftMixin"
+    "client.MinecraftMixin",
+    "client.ScreenEffectRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

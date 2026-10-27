@@ -2,6 +2,7 @@ package net.backupcup.hexed.fabric;
 
 import net.backupcup.hexed.Hexed;
 import net.backupcup.hexed.entity.BlazingSkullEntity;
+import net.backupcup.hexed.flame.HexedFlames;
 import net.backupcup.hexed.loot.HexedLoot;
 import net.backupcup.hexed.network.HexedNetwork;
 import net.backupcup.hexed.register.RegisterEntities;
@@ -23,6 +24,10 @@ public class HexedFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         Hexed.init();
+        // Fabric's dependency format can't express "one of these two", so it is checked here.
+        if (HexedFlames.activeMod() == null) {
+            throw new IllegalStateException(HexedFlames.missingMessage());
+        }
 
         for (HexedNetwork.Entry<?> entry : HexedNetwork.CLIENTBOUND) {
             registerClientbound(entry);

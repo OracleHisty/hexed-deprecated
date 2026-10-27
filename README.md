@@ -25,6 +25,10 @@ These powerful enchantments offer unique mechanics that can turn the tide of any
 
 ## All recipes show up in EMI, REI, JEI and the Vanilla Recipe Book.
 
+## Requirements
+
+Hexed needs **one** flame mod for its custom flames: either [Prometheus](https://modrinth.com/mod/prometheus-api) (preferred) or [Dyed Flames](https://modrinth.com/mod/dyed-flames). Install only one; the two tend to conflict.
+
 ## ![Banner in a style of ink writing indicating the start of the Compatability section](https://www.bisecthosting.com/images/CF/Hexed/BH_HEX_comp.webp)
 
 For the most part, Hexed is compatible with all the mods, there is an exception however:

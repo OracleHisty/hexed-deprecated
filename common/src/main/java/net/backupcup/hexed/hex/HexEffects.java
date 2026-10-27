@@ -2,6 +2,7 @@ package net.backupcup.hexed.hex;
 
 import net.backupcup.hexed.Config;
 import net.backupcup.hexed.Hexed;
+import net.backupcup.hexed.effect.AflameMobEffect;
 import net.backupcup.hexed.network.BloodthirstyParticlesPayload;
 import net.backupcup.hexed.network.HexedNetwork;
 import net.backupcup.hexed.register.RegisterStatusEffects;
@@ -68,15 +69,16 @@ public final class HexEffects {
         else if (hex.equals(Hexes.DISFIGUREMENT)) disfigurement(user);
     }
 
+    /** Sets both the target and the wielder aflame, for their own durations. */
     private static void aflame(LivingEntity user, Entity target) {
         if (!(target instanceof LivingEntity living)) return;
         Config.AflameHexParams config = Hexed.config().aflameHex;
 
         if (living.isAlive()) {
-            living.addEffect(new MobEffectInstance(RegisterStatusEffects.ABLAZE.holder(), config.AblazeDuration, config.AblazeAmplifier, true, true, true));
+            AflameMobEffect.apply(living, config.targetDuration, config.targetAmplifier, user);
         }
-        if (user.isAlive() && !HexHelper.hasFullRobes(user)) {
-            user.addEffect(new MobEffectInstance(RegisterStatusEffects.AFLAME.holder(), config.AflameDuration, config.AflameAmplifier, true, true, true));
+        if (user.isAlive()) {
+            AflameMobEffect.apply(user, config.userDuration, config.userAmplifier, user);
         }
     }
 

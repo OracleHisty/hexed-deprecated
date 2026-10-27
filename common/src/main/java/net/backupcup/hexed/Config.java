@@ -2,6 +2,7 @@ package net.backupcup.hexed;
 
 import blue.endless.jankson.Comment;
 import blue.endless.jankson.Jankson;
+import blue.endless.jankson.JsonElement;
 import blue.endless.jankson.JsonObject;
 import blue.endless.jankson.api.DeserializationException;
 import blue.endless.jankson.api.SyntaxError;
@@ -45,7 +46,10 @@ public class Config {
             if (file.exists()) {
                 lastError = null;
                 JsonObject json = JANKSON.load(file);
-                return JANKSON.fromJsonCarefully(json, Config.class);
+                boolean migrated = migrate(json);
+                Config config = JANKSON.fromJsonCarefully(json, Config.class);
+                if (migrated) config.save();
+                return config;
             }
             defaults.save();
             lastError = null;
@@ -66,6 +70,27 @@ public class Config {
         Hexed.LOGGER.warn("Using default configuration.");
         lastError = Component.translatable("message.hexed.error.config.general");
         return defaults;
+    }
+
+    /** Renames keys from older versions of the file. Returns whether anything changed. */
+    private static boolean migrate(JsonObject json) {
+        boolean changed = false;
+        // Aflame used to put Ablaze on the target and fire on the wielder; both now get Aflame.
+        if (json.get("aflameHex") instanceof JsonObject aflame) {
+            changed |= rename(aflame, "AblazeDuration", "targetDuration");
+            changed |= rename(aflame, "AblazeAmplifier", "targetAmplifier");
+            changed |= rename(aflame, "AflameDuration", "userDuration");
+            changed |= rename(aflame, "AflameAmplifier", "userAmplifier");
+        }
+        if (changed) Hexed.LOGGER.info("Updated old Hexed config keys");
+        return changed;
+    }
+
+    private static boolean rename(JsonObject object, String from, String to) {
+        if (!object.containsKey(from)) return false;
+        JsonElement value = object.remove(from);
+        if (!object.containsKey(to)) object.put(to, value);
+        return true;
     }
 
     @Nullable
@@ -121,17 +146,18 @@ public class Config {
     public static class AflameHexParams {
         public boolean shouldRegister = true;
 
-        public int AblazeDuration = 80;
-        public int AblazeAmplifier = 1;
+        public int targetDuration = 80;
+        public int targetAmplifier = 1;
 
-        public int AflameDuration = 40;
-        public int AflameAmplifier = 0;
+        public int userDuration = 40;
+        public int userAmplifier = 0;
     }
 
     @Comment("\"Aflame\" Hex settings" + SKIP +
         "shouldRegister - whether the hex should be obtainable\n" +
-        "AblazeDuration/Amplifier - The duration (in ticks) & the amplifier of the Ablaze debuff\n" +
-        "AflameDuration/Amplifier - The duration (in ticks) & the amplifier of the Aflame debuff\n")
+        "targetDuration/Amplifier - The duration (in ticks) & the amplifier of the Aflame burn on whoever is hit\n" +
+        "userDuration/Amplifier - The duration (in ticks) & the amplifier of the Aflame burn on the wielder\n" +
+        "Aflame deals 1 + amplifier damage per second and ignores effect immunity, except on someone wearing the full Calamitous set")
     public AflameHexParams aflameHex = new AflameHexParams();
 
     //AMPLIFY

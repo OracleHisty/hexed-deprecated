@@ -46,6 +46,13 @@ public final class RegisterBlocks {
         .noOcclusion()
         .pushReaction(PushReaction.BLOCK))));
 
+    /**
+     * Never placed in the world: it only stands in as the fire source for Aflame's flames when Dyed Flames draws them.
+     * Behaves as air and has no item.
+     */
+    public static final RegObject<Block> AFLAME_FLAME = Reg.register(BuiltInRegistries.BLOCK, "aflame_flame",
+        () -> new Block(BlockBehaviour.Properties.of().air().noCollission().noLootTable().replaceable()));
+
     private RegisterBlocks() {}
 
     public static <T extends Block> RegObject<T> block(String name, Supplier<T> factory) {

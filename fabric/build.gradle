@@ -8,6 +8,16 @@ repositories {
         name = 'TerraformersMC'
         url = uri('https://maven.terraformersmc.com/')
     }
+    exclusiveContent {
+        // Only for the dev runtime: libraries Dyed Flames ships nested in its jar, which Loom doesn't unpack in dev.
+        forRepository {
+            maven {
+                name = 'Fuzs'
+                url = uri('https://raw.githubusercontent.com/Fuzss/modresources/main/maven/')
+            }
+        }
+        filter { includeGroup('fuzs.neoforgedatapackextensions') }
+    }
 }
 
 dependencies {
@@ -20,7 +30,28 @@ dependencies {
 
     // Optional compat, see compat/EnchancementUtilMixin
     modCompileOnly "maven.modrinth:enchancement:${enchancement_version}"
+
+    // Flame mods (common/src/compat). One of them is required at runtime.
+    modCompileOnly "maven.modrinth:prometheus-api:${prometheus_fabric_version}"
+    modCompileOnly "maven.modrinth:cobweb:${cobweb_fabric_version}"
+    modCompileOnly "maven.modrinth:dyed-flames:${dyedflames_fabric_version}"
+    modCompileOnly "maven.modrinth:puzzles-lib:${puzzleslib_fabric_version}"
+    if (dev_flame_mod == 'prometheus') {
+        modLocalRuntime "maven.modrinth:prometheus-api:${prometheus_fabric_version}"
+        modLocalRuntime "maven.modrinth:cobweb:${cobweb_fabric_version}"
+    } else if (dev_flame_mod == 'dyedflames') {
+        modLocalRuntime "maven.modrinth:dyed-flames:${dyedflames_fabric_version}"
+        modLocalRuntime "maven.modrinth:puzzles-lib:${puzzleslib_fabric_version}"
+        modLocalRuntime "maven.modrinth:forge-config-api-port:${forgeconfigapiport_fabric_version}"
+        // Nested in the jars above; a real Fabric install unpacks these itself.
+        modLocalRuntime "fuzs.neoforgedatapackextensions:neoforgedatapackextensions-fabric:21.1.2"
+        localRuntime "com.electronwill.night-config:core:3.8.0"
+        localRuntime "com.electronwill.night-config:toml:3.8.0"
+    }
 }
+
+// Flame mod integrations, shared by both loaders but compiled against each loader's build of those mods.
+sourceSets.main.java.srcDir project(':common').file('src/compat/java')
 
 // Dev-only smoke tests (see common/src/gametest). Not included in the mod jar.
 sourceSets {

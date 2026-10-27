@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 
 public final class RegisterDamageTypes {
     public static final ResourceKey<DamageType> ABLAZE_DAMAGE = key("ablazed");
+    public static final ResourceKey<DamageType> AFLAME_DAMAGE = key("aflame");
     public static final ResourceKey<DamageType> VINDICTIVE_DAMAGE = key("vindictive");
     public static final ResourceKey<DamageType> FRANTIC_DAMAGE = key("frantic");
 

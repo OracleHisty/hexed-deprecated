@@ -28,6 +28,7 @@
   "block.hexed.tall_pink_candle": "Tall Pink Candle",
 
   "block.hexed.accursed_altar": "Altar of the Accursed",
+  "block.hexed.aflame_flame": "Aflame Flame",
 
   "block.hexed.skeleton_skull_candle": "Skeleton Skull Candle",
   "block.hexed.wither_skull_candle": "Wither Skull Candle",
@@ -157,6 +158,8 @@
 
   "death.attack.ablazed": "%1$s turned into searing ashes",
   "death.attack.ablazed.player": "%1$s turned into searing ashes whilst fighting %2$s",
+  "death.attack.aflame": "%1$s was consumed by accursed flames",
+  "death.attack.aflame.player": "%1$s was consumed by accursed flames whilst fighting %2$s",
   "death.attack.vindictive": "%1$s got multiplied by zero",
   "death.attack.vindictive.player": "%1$s got multiplied by zero whilst fighting %2$s",
   "death.attack.frantic": "%1$s's pain receptors got overloaded",

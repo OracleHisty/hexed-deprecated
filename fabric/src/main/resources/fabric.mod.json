@@ -32,5 +32,13 @@
     "minecraft": "~${minecraft_version}",
     "java": ">=${java_version}",
     "fabric-api": "*"
+  },
+  "suggests": {
+    "prometheus": ">=1.2.5",
+    "dyedflames": ">=21.1.0"
+  },
+  "breaks": {
+    "prometheus": "<1.2.5",
+    "dyedflames": "<21.1.0"
   }
 }

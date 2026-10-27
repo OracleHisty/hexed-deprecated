@@ -1,5 +1,6 @@
 package net.backupcup.hexed;
 
+import net.backupcup.hexed.flame.HexedFlames;
 import net.backupcup.hexed.hex.HexHelper;
 import net.backupcup.hexed.hex.Hexes;
 import net.backupcup.hexed.network.HexUiUpdatePayload;
@@ -71,6 +72,8 @@ public final class Hexed {
         RegisterMenus.init();
         RegisterStats.init();
         RegisterCreativeTabs.init();
+
+        HexedFlames.init();
     }
 
     /** Reloads the config whenever the server reloads its data packs. */

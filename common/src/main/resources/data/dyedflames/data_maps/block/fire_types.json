@@ -1,0 +1,20 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "dyedflames"
+    }
+  ],
+  "values": {
+    "hexed:blazing_magma": {
+      "particle": "minecraft:lava",
+      "texture0": "hexed:block/blazing_magma_fire_0",
+      "texture1": "hexed:block/blazing_magma_fire_1"
+    },
+    "hexed:aflame_flame": {
+      "particle": "minecraft:crimson_spore",
+      "texture0": "hexed:block/aflame_fire_0",
+      "texture1": "hexed:block/aflame_fire_1"
+    }
+  }
+}

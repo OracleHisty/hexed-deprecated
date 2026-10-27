@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.backupcup.hexed.Config;
 import net.backupcup.hexed.Hexed;
 import net.backupcup.hexed.entity.BlazingSkullEntity;
+import net.backupcup.hexed.flame.HexedFlames;
 import net.backupcup.hexed.hex.HexHelper;
 import net.backupcup.hexed.hex.Hexes;
 import net.backupcup.hexed.item.BlazingWaveHelper;
@@ -13,10 +14,14 @@ import net.backupcup.hexed.item.BlightedHarvestItem;
 import net.backupcup.hexed.register.RegisterDamageTypes;
 import net.backupcup.hexed.register.RegisterSounds;
 import net.backupcup.hexed.register.RegisterStatusEffects;
+import net.backupcup.hexed.util.AflameBurning;
 import net.backupcup.hexed.util.HexRandom;
 import net.backupcup.hexed.util.TimedEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -43,9 +48,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = LivingEntity.class, priority = 10)
-public abstract class LivingEntityMixin extends Entity {
+public abstract class LivingEntityMixin extends Entity implements AflameBurning {
+    /** Whether the Aflame effect is active, so clients can draw its flames without knowing the entity's effects. */
+    @Unique private static final EntityDataAccessor<Boolean> HEXED$AFLAME = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+
     @Unique private boolean hexed$isFlaring = false;
     @Unique private boolean hexed$hasSpawnedSkulls = false;
     @Unique private int hexed$avertingTicks = 0;
@@ -68,6 +77,44 @@ public abstract class LivingEntityMixin extends Entity {
     @Unique
     private LivingEntity hexed$self() {
         return (LivingEntity) (Object) this;
+    }
+
+    @Override
+    public boolean hexed$isAflameBurning() {
+        return entityData.get(HEXED$AFLAME);
+    }
+
+    @Inject(method = "defineSynchedData", at = @At("TAIL"))
+    private void hexed$defineAflame(SynchedEntityData.Builder builder, CallbackInfo ci) {
+        builder.define(HEXED$AFLAME, false);
+    }
+
+    /**
+     * Keeps the Aflame flag and the flame mod's flame in step with the effect. Runs after movement, because
+     * Prometheus resets the fire type of entities that move while not on fire.
+     */
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void hexed$aflameFlames(CallbackInfo ci) {
+        if (level().isClientSide()) return;
+
+        boolean aflame = hasEffect(RegisterStatusEffects.AFLAME.holder());
+        boolean wasAflame = entityData.get(HEXED$AFLAME);
+        if (aflame != wasAflame) entityData.set(HEXED$AFLAME, aflame);
+
+        if (aflame) {
+            // Real fire takes over the flames while it lasts.
+            if (getRemainingFireTicks() <= 0) HexedFlames.show(this, HexedFlames.Flame.AFLAME);
+        } else if (wasAflame) {
+            HexedFlames.clear(this, HexedFlames.Flame.AFLAME);
+        }
+    }
+
+    /** Aflame ignores effect immunity; only the full Calamitous set keeps it off. */
+    @Inject(method = "canBeAffected", at = @At("HEAD"), cancellable = true)
+    private void hexed$aflameIgnoresImmunity(MobEffectInstance effect, CallbackInfoReturnable<Boolean> cir) {
+        if (effect.is(RegisterStatusEffects.AFLAME.holder())) {
+            cir.setReturnValue(!HexHelper.hasFullRobes(getArmorSlots()));
+        }
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("HEAD"))

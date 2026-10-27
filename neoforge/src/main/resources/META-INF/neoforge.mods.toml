@@ -31,3 +31,18 @@ type = "required"
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
+
+# Hexed needs one of these two flame mods (checked at startup); both are optional here so either can be used alone.
+[[dependencies.${mod_id}]]
+modId = "prometheus"
+type = "optional"
+versionRange = "[1.2.5,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "dyedflames"
+type = "optional"
+versionRange = "[21.1.0,)"
+ordering = "AFTER"
+side = "BOTH"

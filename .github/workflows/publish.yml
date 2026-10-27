@@ -69,8 +69,11 @@ jobs:
           loaders: fabric
           game-versions: "${{ env.MINECRAFT_VERSION }}"
           java: "${{ env.JAVA_VERSION }}"
+          # Exactly one flame mod is required (checked at startup); Modrinth can't express "one of", so both are optional.
           dependencies: |
             fabric-api(required)
+            prometheus-api(optional)
+            dyed-flames(optional)
 
       - name: Publish (NeoForge)
         uses: Kir-Antipov/mc-publish@v3.3
@@ -95,3 +98,6 @@ jobs:
           loaders: neoforge
           game-versions: "${{ env.MINECRAFT_VERSION }}"
           java: "${{ env.JAVA_VERSION }}"
+          dependencies: |
+            prometheus-api(optional)
+            dyed-flames(optional)

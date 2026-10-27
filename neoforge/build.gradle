@@ -62,4 +62,20 @@ dependencies {
     }
     // In dev the jar-in-jar isn't unpacked, so the library has to be put on the game's classpath explicitly.
     additionalRuntimeClasspath "blue.endless:jankson:${jankson_version}"
+
+    // Flame mods (common/src/compat). One of them is required at runtime.
+    compileOnly "maven.modrinth:prometheus-api:${prometheus_neoforge_version}"
+    compileOnly "maven.modrinth:cobweb:${cobweb_neoforge_version}"
+    compileOnly "maven.modrinth:dyed-flames:${dyedflames_neoforge_version}"
+    compileOnly "maven.modrinth:puzzles-lib:${puzzleslib_neoforge_version}"
+    if (dev_flame_mod == 'prometheus') {
+        runtimeOnly "maven.modrinth:prometheus-api:${prometheus_neoforge_version}"
+        runtimeOnly "maven.modrinth:cobweb:${cobweb_neoforge_version}"
+    } else if (dev_flame_mod == 'dyedflames') {
+        runtimeOnly "maven.modrinth:dyed-flames:${dyedflames_neoforge_version}"
+        runtimeOnly "maven.modrinth:puzzles-lib:${puzzleslib_neoforge_version}"
+    }
 }
+
+// Flame mod integrations, shared by both loaders but compiled against each loader's build of those mods.
+sourceSets.main.java.srcDir project(':common').file('src/compat/java')

@@ -3,6 +3,7 @@ package net.backupcup.hexed.neoforge;
 import net.backupcup.hexed.Hexed;
 import net.backupcup.hexed.client.HexedClientNetwork;
 import net.backupcup.hexed.entity.BlazingSkullEntity;
+import net.backupcup.hexed.flame.HexedFlames;
 import net.backupcup.hexed.loot.HexedLoot;
 import net.backupcup.hexed.network.HexedNetwork;
 import net.backupcup.hexed.register.RegisterEntities;
@@ -10,6 +11,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingException;
+import net.neoforged.fml.ModLoadingIssue;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
@@ -28,6 +31,10 @@ public class HexedNeoForge {
     public HexedNeoForge(IEventBus modBus) {
         Hexed.init();
         HexedNeoForgeFluids.init();
+        // mods.toml can't express "one of these two", so it is checked here.
+        if (HexedFlames.activeMod() == null) {
+            throw new ModLoadingException(ModLoadingIssue.error(HexedFlames.missingMessage()));
+        }
 
         modBus.addListener(RegisterEvent.class, NeoForgePlatform::onRegister);
         modBus.addListener(RegisterPayloadHandlersEvent.class, HexedNeoForge::registerPayloads);
