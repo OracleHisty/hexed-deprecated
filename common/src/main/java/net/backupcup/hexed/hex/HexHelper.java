@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Optional;
 
 public final class HexHelper {
+    /** The color hexes are listed in on item tooltips, as red is for curses and gray for enchantments. */
+    public static final ChatFormatting HEX_COLOR = ChatFormatting.DARK_RED;
+
     private HexHelper() {}
 
     public static ItemEnchantments enchantments(ItemStack stack) {
